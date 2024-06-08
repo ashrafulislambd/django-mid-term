@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% load humanize %}
+    <h2>Profile</h2>
+    <a href="{% url "car:edit_profile" %}" class="btn btn-primary mb-4">Edit</a>
+    <div>
+        <table class="table table-striped">
+            <tr>
+                <td>Username</td>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>{{ user.first_name }} {{ user.last_name }}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>{{ user.email }}</td>
+            </tr>
+        </table>
+    </div>
+    <h2>Order History</h2>
+    <div>
+        {% for order in order_list %}
+            <div class="card mx-auto" style="width: 80%;">
+                <div class="d-flex">
+                    <img src="{{ order.car.image.url }}" class="card-img-top w-25" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ order.car.name }}</h5>
+                        <span><b>Brand: </b>{{ order.car.brand }}</span><br/>
+                        <span><b>Price: </b>${{ order.car.price | intcomma }}</span><br/>
+                        <span><b>Quantity: </b>1</span><br/>
+                        <span><b>Ordered At: </b>{{ order.time }}</span><br/> 
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

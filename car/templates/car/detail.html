@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block header %}
+    <link rel="stylesheet" href="{% static "car/style.css" %}}"/>
+{% endblock %}
+
+{% load crispy_forms_tags %}
+{% block content %} 
+    {% load humanize %}
+    <div class="d-flex">
+        <div id="banner-text">
+            <div class="center">
+                <h1>{{ car.name }}</h1>
+                <p>{{ car.description }}</p>
+                <span><b>Price: </b>${{ car.price | intcomma }}</span><br/>
+                <span><b>Quantity: </b>{{ car.quantity }}</span><br/>
+                <span><b>Brand: </b>{{ car.brand.name }}</span><br/>
+            </div>
+        </div>
+        <div>
+            <img width="400px" src="{{ car.image.url }}" />
+        </div>
+    </div>
+    <div>
+        {% if user.is_authenticated %}
+            {% if car.quantity > 0 %}
+                <form action="{% url "car:buy" car.id %}" method="POST">    
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Buy Now</button>
+                </form>
+            {% else %}
+                <a href="#" class="btn disabled">Out of Stock</a>
+            {% endif %}
+        {% else %}
+            <p>Log In / Sign Up to buy</p>
+        {% endif %}
+    </div>
+    <div>
+        <h2>Comments</h2>
+        <ul class="list-group">
+            {% for comment in comments %}
+                <li class="list-group-item">
+                    <span><b>{{ comment.name }}</b> - {{ comment.created_at }}</span>
+                    <p>{{ comment.comment }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="mt-2">
+        <h2>Add a comment</h2>
+        <form action="{% url "car:add_comment" car.id %}" method="POST">
+            {% csrf_token %}
+            {{ comment_form | crispy }}
+            <button class="btn btn-primary" type="submit">Comment</button>
+        </form>
+    </div>
+{% endblock %}

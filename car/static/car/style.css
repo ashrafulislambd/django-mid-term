@@ -1,0 +1,16 @@
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.w-full {
+    width: 100% !important;
+}
+
+#banner-text {
+    width: 700px;
+}
+
+#banner-text div {
+    width: 70%;
+}
